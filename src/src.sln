@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks", "BuildingBlocks\BuildingBlocks.csproj", "{DE7CF7DD-050D-44E4-B424-DAE45A03EE1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C4E45BB3-2461-485E-95DB-4B49C879BC48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cards", "Cards", "{97201116-5394-4943-963F-D5FF839EBCD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D7FFEB90-52DC-4817-97D0-9EC24ACCDDDC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cards", "Services\Cards\src\Cards\Cards.csproj", "{02976143-44F6-41E8-9483-DF823ECF4B1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE7CF7DD-050D-44E4-B424-DAE45A03EE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7CF7DD-050D-44E4-B424-DAE45A03EE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7CF7DD-050D-44E4-B424-DAE45A03EE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7CF7DD-050D-44E4-B424-DAE45A03EE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02976143-44F6-41E8-9483-DF823ECF4B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02976143-44F6-41E8-9483-DF823ECF4B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02976143-44F6-41E8-9483-DF823ECF4B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02976143-44F6-41E8-9483-DF823ECF4B1E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97201116-5394-4943-963F-D5FF839EBCD6} = {C4E45BB3-2461-485E-95DB-4B49C879BC48}
+		{D7FFEB90-52DC-4817-97D0-9EC24ACCDDDC} = {97201116-5394-4943-963F-D5FF839EBCD6}
+		{02976143-44F6-41E8-9483-DF823ECF4B1E} = {D7FFEB90-52DC-4817-97D0-9EC24ACCDDDC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C7DCF93-62A6-4CD0-9470-26CC9DB8142D}
+	EndGlobalSection
+EndGlobal
