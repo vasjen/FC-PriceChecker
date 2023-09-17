@@ -1,14 +1,15 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using BuildingBlocks.Core.Models;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc;
-using Scraper.Models;
+using Newtonsoft.Json;
+
 
 namespace Scraper.Services
 {
     public class ScraperService : IScraperService
     {
         private readonly HttpClient _httpClient;
+        private const string link = "24/player/";
+        private const string latestPlayersLink = "https://www.futbin.com/latest";
 
         public ScraperService(IHttpClientFactory httpClientFactory)
         {
@@ -16,30 +17,72 @@ namespace Scraper.Services
 
         }
         
-
-        
-
-        public async Task<string?> GetCard(string id)
+        public async Task<Card?> GetCard(int id)
         {
-            var page = await _httpClient.GetStringAsync($"24/player/{id}");
-            // System.Console.WriteLine(page);
-            var doc = new HtmlDocument();
-            doc.LoadHtml(page);
-            var name = doc.DocumentNode.SelectSingleNode("(//td[@class='table-row-text'])[1]").InnerText;
-            var FbDataId = doc.DocumentNode.SelectSingleNode("(//td[@class='table-row-text'])[15]").InnerText;
-            var priceResponse = await _httpClient.GetStringAsync($"24/playerPrices?player={FbDataId}");
-            JsonNode jsonNod = JsonNode.Parse(priceResponse);
-            var Price = jsonNod[$"{FbDataId}"]!["prices"]["ps"]!["LCPrice"].GetValue<int>();
-            var result = $"Name: {name} with ID: {FbDataId} and price: {Price} \nPrice Response: {priceResponse}";
+            var doc = await GetHtmlDocument(link+id.ToString());
+            if (doc is null)
+                return null;
             
-            var prices = JsonSerializer.Deserialize<PricesJson>(priceResponse);
-            System.Console.WriteLine(prices?.Id);
-            
-            // ans: {"255565":{"prices":{"ps":{"LCPrice":0,"LCPrice2":0,"LCPrice3":0,"LCPrice4":0,"LCPrice5":0,"updated":0,"MinPrice":0,"MaxPrice":0,"PRP":0,"LCPClosing":0},"pc":{"LCPrice":0,"LCPrice2":0,"LCPrice3":0,"LCPrice4":0,"LCPrice5":0,"updated":"Never","MinPrice":0,"MaxPrice":0,"PRP":0,"LCPClosing":0}}}}
+            var name = GetPlayerName(doc);
+            var FbDataId = GetFbDataId(doc);
+            var price = await GetPriceAsync(FbDataId);
+            var psPrices = GetPsPrices(price);
+            var pcPrices = GetPcPrices(price);
 
-
-            return result;
+         
+            return new Card
+            {
+                Id = id,
+                FbId = id,
+                FbDataId = int.Parse(FbDataId),
+                Name = name,
+                PcPrices = pcPrices,
+                psPrices = psPrices
+            };
             
         }
+
+        public async Task<int> GetMaxId()
+        {
+            var doc = await GetHtmlDocument(latestPlayersLink);
+            if (doc is null)
+                return 0;
+
+            HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@class=' get-tp']");
+            string dataSiteId = node?.Attributes["data-site-id"]?.Value;
+
+            if (dataSiteId != null)
+                return int.Parse(dataSiteId);
+            
+            else
+                return 0;
+        }
+
+        private async Task<HtmlDocument?> GetHtmlDocument(string link)
+        {
+            var page = await _httpClient.GetStringAsync(link);
+            var doc = new HtmlDocument();
+            doc.LoadHtml(page);
+            return doc;
+        }
+        private Ps GetPsPrices(string priceResponse)
+            =>  JsonConvert.DeserializeObject<Ps>(priceResponse);
+
+        private Pc GetPcPrices(string priceResponse)
+            =>  JsonConvert.DeserializeObject<Pc>(priceResponse);
+        private string GetPlayerName(HtmlDocument doc)
+            => doc.DocumentNode
+                  .SelectSingleNode("(//td[@class='table-row-text'])[1]")
+                  .InnerText;
+            
+        private string GetFbDataId(HtmlDocument doc)
+            => doc.DocumentNode
+                  .SelectSingleNode("//th[text()='ID']/following-sibling::td")
+                  .InnerText.Trim();
+           
+        private async Task<string> GetPriceAsync(string FbDataId)
+            => await _httpClient.GetStringAsync($"24/playerPrices?player={FbDataId}");
+
+        
     }
 }

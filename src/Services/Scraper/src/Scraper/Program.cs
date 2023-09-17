@@ -9,6 +9,7 @@ builder.Services.AddHttpClient("fb", c =>
 builder.Services.AddTransient<IScraperService, ScraperService>();
 var app = builder.Build();
 var service = app.Services.GetRequiredService<IScraperService>();
-app.MapGet("/",  async () => await service.GetCard("100"));
+app.MapGet("/",  async (int id) => await service.GetCard(id));
+app.MapGet("/max",  async () => await service.GetMaxId());
 
 app.Run();
