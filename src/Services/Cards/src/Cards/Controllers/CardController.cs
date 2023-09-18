@@ -1,4 +1,4 @@
-using Cards.Models;
+using BuildingBlocks.Core.Models;
 using Cards.Services;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
 using Cards.Data;
-using Cards.Models;
+using BuildingBlocks.Core.Models;
 
 namespace Cards.Services
 {
@@ -16,7 +16,7 @@ namespace Cards.Services
             var card = new Card
             {
                 Name = cardCreateRequest.Name,
-                Description = cardCreateRequest.Description
+                Revision = cardCreateRequest.Description
             };
             await _context.Cards.AddAsync(card);
             await _context.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace Cards.Services
             if (card is not null)
             {
                 card.Name = cardUpdateRequest.Name;
-                card.Description = cardUpdateRequest.Description;
+                card.Revision = cardUpdateRequest.Description;
                 _context.Cards.Update(card);
                 await _context.SaveChangesAsync();
             }

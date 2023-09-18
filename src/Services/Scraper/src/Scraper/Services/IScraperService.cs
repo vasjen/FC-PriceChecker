@@ -7,5 +7,6 @@ namespace Scraper.Services
     {
         Task<Card?> GetCard(int id);
         Task<int> GetMaxId();
+
     }
 }

@@ -1,5 +1,6 @@
+using BuildingBlocks.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Cards.Models;
+
 
 namespace Cards.Data
 {

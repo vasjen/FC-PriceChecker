@@ -1,7 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace BuildingBlocks.Core.Models
 {
     public class Pc
     {
+        [JsonIgnore]
+        public int Id { get; init; }
         public int LCPrice { get; set; }
         public int LCPrice2 { get; set; }
         public int LCPrice3 { get; set; }

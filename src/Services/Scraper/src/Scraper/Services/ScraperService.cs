@@ -16,30 +16,37 @@ namespace Scraper.Services
             _httpClient = httpClientFactory.CreateClient("fb");
 
         }
+        HtmlDocument PlayerPage { get; set; }
         
         public async Task<Card?> GetCard(int id)
         {
-            var doc = await GetHtmlDocument(link+id.ToString());
-            if (doc is null)
+            PlayerPage = await GetHtmlDocument(link+id.ToString());
+            if (PlayerPage is null)
                 return null;
             
-            var name = GetPlayerName(doc);
-            var FbDataId = GetFbDataId(doc);
-            var price = await GetPriceAsync(FbDataId);
+            var name = ParseFromDoc("(//td[@class='table-row-text'])[1]");
+            var FbDataId = ParseFromDoc("//th[text()='ID']/following-sibling::td");
+            var price = await GetPriceAsync(int.Parse(FbDataId));
             var psPrices = GetPsPrices(price);
             var pcPrices = GetPcPrices(price);
-
-         
+            var revision = ParseFromDoc("//th[text()='Revision']/following-sibling::td");
+            var raiting = ParseFromDoc("//*[@id=\"Player-card\"]/div[2]");
+            var position = ParseFromDoc("//*[@id=\"Player-card\"]/div[4]");
+            var displayedName = ParseFromDoc("//*[@id=\"Player-card\"]/div[3]");
+            
             return new Card
             {
                 Id = id,
                 FbId = id,
                 FbDataId = int.Parse(FbDataId),
                 Name = name,
+                DisplayedName = displayedName,
                 PcPrices = pcPrices,
-                psPrices = psPrices
+                PsPrices = psPrices,
+                Position = position,
+                Revision = revision,
+                Raiting = int.Parse(raiting)
             };
-            
         }
 
         public async Task<int> GetMaxId()
@@ -57,7 +64,7 @@ namespace Scraper.Services
             else
                 return 0;
         }
-
+        
         private async Task<HtmlDocument?> GetHtmlDocument(string link)
         {
             var page = await _httpClient.GetStringAsync(link);
@@ -70,19 +77,13 @@ namespace Scraper.Services
 
         private Pc GetPcPrices(string priceResponse)
             =>  JsonConvert.DeserializeObject<Pc>(priceResponse);
-        private string GetPlayerName(HtmlDocument doc)
-            => doc.DocumentNode
-                  .SelectSingleNode("(//td[@class='table-row-text'])[1]")
-                  .InnerText;
-            
-        private string GetFbDataId(HtmlDocument doc)
-            => doc.DocumentNode
-                  .SelectSingleNode("//th[text()='ID']/following-sibling::td")
-                  .InnerText.Trim();
-           
-        private async Task<string> GetPriceAsync(string FbDataId)
+
+        private async Task<string> GetPriceAsync(int FbDataId)
             => await _httpClient.GetStringAsync($"24/playerPrices?player={FbDataId}");
 
-        
+        public string ParseFromDoc(string xPath)
+            => PlayerPage.DocumentNode
+                .SelectSingleNode(xPath)
+                .InnerText;
     }
 }

@@ -12,4 +12,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10"/>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.csproj"/>
+  </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-using Cards.Models;
+using BuildingBlocks.Core.Models;
 
 namespace Cards.Services
 {
