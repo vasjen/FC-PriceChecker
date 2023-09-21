@@ -1,3 +1,4 @@
+using Scraper;
 using Scraper.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,6 @@ builder.Services.AddTransient<IScraperService, ScraperService>();
 var app = builder.Build();
 var service = app.Services.GetRequiredService<IScraperService>();
 app.MapGet("/{id}",  async (int id) => await service.GetCard(id));
-// app.MapGet("/rt/{id}",  async (int id) => await service.GetRaiting(id));
 app.MapGet("/max",  async () => await service.GetMaxId());
-
+// Receive.Wait();
 app.Run();

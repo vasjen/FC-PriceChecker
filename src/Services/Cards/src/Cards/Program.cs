@@ -1,3 +1,4 @@
+using Cards;
 using Cards.Data;
 using Cards.Services;
 
@@ -11,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<ICardService, CardService>();
-
+builder.Services.AddTransient<Receive>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,9 +23,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+var rcv = app.Services.GetService<Receive>();
+CancellationTokenSource cts = new CancellationTokenSource();
+await rcv.ConsumeCardMessage(cts.Token);
+Console.WriteLine("Press [enter] to exit.");
+Console.ReadLine();
+cts.Cancel();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
