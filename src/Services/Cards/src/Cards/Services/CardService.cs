@@ -1,5 +1,6 @@
 using Cards.Data;
 using BuildingBlocks.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cards.Services
 {
@@ -11,13 +12,13 @@ namespace Cards.Services
         {
             _context = context;
         }
-        public async Task<Card> CreateCard(CardCreateRequest cardCreateRequest)
+        public async Task<Card> CreateCard(Card card)
         {
-            var card = new Card
-            {
-                Name = cardCreateRequest.Name,
-                Revision = cardCreateRequest.Description
-            };
+            // var card = new Card
+            // {
+                // Name = cardCreateRequest.Name,
+                // Revision = cardCreateRequest.Description
+            // };
             await _context.Cards.AddAsync(card);
             await _context.SaveChangesAsync();
             return card;
@@ -47,6 +48,12 @@ namespace Cards.Services
                 _context.Cards.Update(card);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<int> GetMaxId()
+        {
+            var card = await _context.Cards.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            return card is null ? 0 : card.Id;
         }
     }
 }

@@ -31,6 +31,13 @@ public class CardController : ControllerBase
         }
         return Ok(card);
     }
+    [HttpGet(Name = "GetMaxId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<int> GetMaxId()
+    {
+        var MaxId = await _cardService.GetMaxId();
+        return MaxId;
+    }
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +70,7 @@ public class CardController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(CardCreateRequest card)
+    public async Task<IActionResult> Create(Card card)
     {
         var createdCard = await _cardService.CreateCard(card);
         return CreatedAtAction(nameof(Get), new { id = createdCard.Id }, createdCard);

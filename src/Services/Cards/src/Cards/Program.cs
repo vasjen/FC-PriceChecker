@@ -23,12 +23,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-var rcv = app.Services.GetService<Receive>();
-CancellationTokenSource cts = new CancellationTokenSource();
-await rcv.ConsumeCardMessage(cts.Token);
-Console.WriteLine("Press [enter] to exit.");
-Console.ReadLine();
-cts.Cancel();
+// var rcv = app.Services.GetService<Receive>();
+// CancellationTokenSource cts = new CancellationTokenSource();
+// await rcv.ConsumeCardMessage(cts.Token);
+// Console.WriteLine("Press [enter] to exit.");
+// Console.ReadLine();
+// cts.Cancel();
 app.UseAuthorization();
 
 app.MapControllers();

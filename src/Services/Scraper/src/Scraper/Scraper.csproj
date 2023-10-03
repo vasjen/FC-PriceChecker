@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>663ed2b1-696b-41d8-9fc6-2a22df7f8cde</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.53"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-    <PackageReference Include="RabbitMQ.Client" Version="6.5.0"/>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.53" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.csproj"/>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.csproj" />
   </ItemGroup>
 </Project>

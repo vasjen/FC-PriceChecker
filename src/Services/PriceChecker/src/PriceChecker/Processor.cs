@@ -16,7 +16,7 @@ namespace PriceChecker
         
         public async Task<Card> CallScraperToGetCard(int id)
         {
-            // Используйте HTTP-запрос к Scraper, чтобы получить карту
+            
             HttpResponseMessage response = await _httpClient.GetAsync($"http://localhost:5278/{id}");
             response.EnsureSuccessStatusCode();
 
